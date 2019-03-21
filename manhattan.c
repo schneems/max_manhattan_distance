@@ -17,7 +17,12 @@ void printMatrix(int count, int array[][count]) {
   for (int i = 0; i < count; i++) {
     printf("  [ ");
     for (int j=0; j < count; j ++) {
-      printf("%i, ", array[i][j]);
+      printf("%i", array[i][j]);
+      if (j == count-1) {
+        printf(" ");
+      } else {
+        printf(", ");
+      }
     }
     printf("]\n");
   }
@@ -169,12 +174,42 @@ int my_solution(int width, int array[][width]) {
 }
 
 int main (int argc, char *argv[]){
-  int width = 5;
-  int input_array[width][width];
+  int width = -5;
   srand(time(NULL));
+  double probability = -1.0;
 
+
+  for (int i = 0; i < argc; i++) {
+    char const *option =  argv[i];
+    if (option[0] == '-') {
+      switch (option[1])
+      {
+        case 'p':
+          probability = atoi(argv[i+1])/100.0;
+          break;
+        case 'w':
+          width = atoi(argv[i+1]);
+          break;
+        default:
+          printf("flag not recognised %s\n", option);
+          break;
+      }
+    }
+    else {
+    }
+  }
+
+  if (width < 0) {
+    width = 5;
+  }
+
+
+  if (probability < 0) {
+    probability = 1.0/width;
+  }
+
+  int input_array[width][width];
   while (1) {
-    double probability = 1.0/width;
     // printf("%i\n", );
     #pragma omp parallel for
     for (int i=0; i < width; i++) {
